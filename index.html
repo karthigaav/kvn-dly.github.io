@@ -12,11 +12,11 @@
 
 var map;
 function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15
-  });
+  map = new google.maps.Map(document.getElementById('map'));
   ctfastrak = new google.maps.KmlLayer({map: map,
-										url: 'https://kvn-dly.github.io/CTfastrak%20-%20%20Rapid%20Transit%20Service.kmz'});
+										url: 'https://kvn-dly.github.io/CTfastrak%20-%20%20Rapid%20Transit%20Service.kmz'
+									   });
+  map.setZoom(12);
 }
 
     </script>
