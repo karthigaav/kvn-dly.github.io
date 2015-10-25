@@ -3,14 +3,27 @@
   <head>
     <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 100%; }
+      #map { height: 100%;
+			 width: 79%;
+			 float: right;}
+	  #content-window {
+        position: fixed;
+        font-family: 'Helvetica';
+        height: 100%;
+        line-height: 30px;
+        padding-left: 10px;
+        width: 200px;
+      }
     </style>
   </head>
   <body>
     <div id="map"></div>
+	<div id="content-window"></div>
     <script type="text/javascript">
 
 var map;
+var ctfastrak;
+
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'),
 							{center: {lat:41.72,lng:-72.74},
@@ -18,13 +31,23 @@ function initMap() {
 							});
   ctfastrak = new google.maps.KmlLayer({map: map,
 										url: 'https://kvn-dly.github.io/CTfastrak%20-%20%20Rapid%20Transit%20Service.kmz',
-										preserveViewport: true
+										preserveViewport: true,
+										suppressInfoWindows: true
 									   });
+  
+  ctfastrak.addListener('click', function(kmlEvent){
+									var text = kmlEvent.featureData.name + '<br>' + kmlEvent.featureData.description;
+									showInContentWindow(text);
+									});
+
+  function showInContentWindow(text) {
+	var contentWindow = document.getElementById('content-window')
+	contentWindow.innerHTML = text;
+	}
 }
 
     </script>
-    <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKCfeZWk7iA9OXoLSWVpUfXoLm2ekRvgg&callback=initMap">
-    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKCfeZWk7iA9OXoLSWVpUfXoLm2ekRvgg&callback=initMap">
+	</script>
   </body>
 </html>
