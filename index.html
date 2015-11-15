@@ -57,6 +57,8 @@ function initMap() {
   google.maps.event.addListener(map, 'click', function(event) {
     console.log(google.maps.geometry.poly.containsLocation(event.latLng, ctfastrakBounds));
   });
+  
+  getBusLocations();
 }
 
 
