@@ -22,14 +22,15 @@
     <script type="text/javascript">
 
 var map;
-var ctfastrak;
+//var ctfastrak;
+var busArray = [];
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'),
 							{center: {lat:41.72,lng:-72.74},
 							 zoom: 12
 							});
-  ctfastrak = new google.maps.KmlLayer({map: map,
+   ctfastrak = new google.maps.KmlLayer({map: map,
 										url: 'https://kvn-dly.github.io/CTfastrak%20-%20%20Rapid%20Transit%20Service.kmz',
 										preserveViewport: true,
 										suppressInfoWindows: true
@@ -44,25 +45,47 @@ function initMap() {
 	var contentWindow = document.getElementById('content-window')
 	contentWindow.innerHTML = text;
 	}
+  var ctfastrakBounds = new google.maps.Polygon({
+    paths: [
+      new google.maps.LatLng(41.845, -72.558),
+      new google.maps.LatLng(41.611, -72.965),
+      new google.maps.LatLng(41.611, -72.558),
+      new google.maps.LatLng(41.845, -72.965)
+    ]
+  });
+
+  google.maps.event.addListener(map, 'click', function(event) {
+    console.log(google.maps.geometry.poly.containsLocation(event.latLng, ctfastrakBounds));
+  });
 }
 
+
+function getBusLocations(){
 var xhr = new XMLHttpRequest();
 xhr.open("GET", "http://65.213.12.244/realtimefeed/vehicle/vehiclepositions.json", true);
 xhr.onload = function () {
 	var feed = eval("("+ xhr.response +")");
 	var coords = "";
 	var i;
+  for (var i = 0; i < busArray.length; i++) {
+    busArray[i].setMap(null);
+  }
+  busArray = [];
 	for(i=0; i < Object.keys(feed["entity"]).length;i++){
 		var marker = new google.maps.Marker({
 				position: {lat: feed["entity"][i].vehicle.position.latitude, lng: feed["entity"][i].vehicle.position.longitude},
 				map: map,
-				title: feed["entity"][i].id})
+				title: feed["entity"][i].id});
+		busArray.push(marker);
 		}
 	
-};
-xhr.send();
+}
+xhr.send()
+}
+setInterval(function(){getBusLocations()}, 30000);
 
-    </script>
+
+	</script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKCfeZWk7iA9OXoLSWVpUfXoLm2ekRvgg&callback=initMap">
 	</script>
   </body>
