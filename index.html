@@ -44,7 +44,9 @@ function initMap() {
   function showInContentWindow(text) {
 	var contentWindow = document.getElementById('content-window')
 	contentWindow.innerHTML = text;
-	}
+	};
+	
+  map.data.loadGeoJson('stops.json');
   var ctfastrakBounds = new google.maps.Polygon({
     paths: [
       new google.maps.LatLng(41.845, -72.558),
@@ -77,7 +79,8 @@ xhr.onload = function () {
 		var marker = new google.maps.Marker({
 				position: {lat: feed["entity"][i].vehicle.position.latitude, lng: feed["entity"][i].vehicle.position.longitude},
 				map: map,
-				title: feed["entity"][i].id});
+				title: feed["entity"][i].id,
+				icon: 'vehicle12.png'});
 		busArray.push(marker);
 		}
 	
@@ -90,5 +93,6 @@ setInterval(function(){getBusLocations()}, 30000);
 	</script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKCfeZWk7iA9OXoLSWVpUfXoLm2ekRvgg&callback=initMap">
 	</script>
+	<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
   </body>
 </html>
