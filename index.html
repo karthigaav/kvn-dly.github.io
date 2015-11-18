@@ -26,27 +26,36 @@ var ctfastrak;
 var trips;
 var busArray = [];
 
+  
+  
+
 function initMap() {
+  //Create map object
   map = new google.maps.Map(document.getElementById('map'),
 							{center: {lat:41.72,lng:-72.74},
 							 zoom: 12
 							});
+							
+   //Load CTFastrak routes, parking, and multi-use trail access points
    ctfastrak = new google.maps.KmlLayer({map: map,
 										url: 'https://kvn-dly.github.io/CTfastrak%20-%20%20Rapid%20Transit%20Service.kmz',
 										preserveViewport: true,
 										suppressInfoWindows: true
 									   });
   
+  //Display CTFastrak KML attributes in 'content-window' div
   ctfastrak.addListener('click', function(kmlEvent){
 									var text = kmlEvent.featureData.name + '<br>' + kmlEvent.featureData.description;
 									showInContentWindow(text);
 									});
 
+  //Send html to 'content-window' div
   function showInContentWindow(text) {
 	var contentWindow = document.getElementById('content-window')
 	contentWindow.innerHTML = text;
 	};
 
+  //Set map layer style for bus stops
   map.data.setStyle(function(feature){return({icon: {
         path: google.maps.SymbolPath.CIRCLE,
         fillColor: 'pink',
@@ -54,10 +63,11 @@ function initMap() {
         strokeColor: 'white',
         strokeWeight: .5,
         scale: 3
-      }})});	
-  var stops = map.data.loadGeoJson('https://kvn-dly.github.io/stops.json');
-  
-  getTrips();
+      }})});
+	  
+  //Add bus stops	  
+  var stops = map.data.loadGeoJson('https://kvn-dly.github.io/fastrakStops.json');
+
   
   map.data.addListener('click', function(event){
 										text = "";
@@ -85,19 +95,21 @@ function initMap() {
     console.log(google.maps.geometry.poly.containsLocation(event.latLng, ctfastrakBounds));
   });
   
+  getTrips();  
   getBusLocations();
+
 }
 
 function toHHMMSS(time) {
-    var sec_num = parseInt(time, 10); // don't forget the second param
-    var hours   = Math.floor(sec_num / 3600);
-    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+    var h, m, s;
+    s = Math.floor(time / 1000);
+    m = Math.floor(s / 60);
+    s = s % 60;
+    h = Math.floor(m / 60);
+    m = m % 60;
+    h = h % 24;
 
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    var time    = hours+':'+minutes+':'+seconds;
+    var time    = h+':'+m;
     return time;
 }
 
@@ -134,7 +146,10 @@ xhr.onload = function () {
 }
 xhr.send()
 }
+
+//Reload realtime data every 30 seconds
 setInterval(function(){getBusLocations()}, 30000);
+setInterval(function(){getTrips()}, 30000);
 
 
 	</script>
