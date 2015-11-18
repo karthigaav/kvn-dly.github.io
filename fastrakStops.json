@@ -278,6 +278,14 @@
         "location_type": "",
         "parent_station": ""
       },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -72.736314,
+          41.716263
+        ]
+      }
+    },
     {
       "type": "Feature",
       "properties": {
