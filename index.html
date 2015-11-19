@@ -93,7 +93,8 @@ function initMap() {
 									document.getElementById('content-window').textContent =
 									event.feature.getProperty('stop_name') + text;
 									// alert window
-									window.alert(obj);
+									document.getElementById('content-window').textContent =
+									event.feature.getProperty('incrementality') + text;
 									});
   
   var ctfastrakBounds = new google.maps.Polygon({
