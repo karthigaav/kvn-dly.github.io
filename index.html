@@ -81,7 +81,9 @@ function initMap() {
 				                            // I am adding the alert code here 
                                				var k;
 											for(k=0; k<object.keys(alerts["entity"][k].length;k++){
-											if(alerts["entity"][k] != 0){
+											var z;
+											for(z=0; z < Object.keys(alerts["entity"][k].header).length;z++)
+											if(alerts["entity"][k].header[z].incrementality == event.feature.getProperty('incrementality')){
 											
 											var obj = alerts["entity"][k];
 				
