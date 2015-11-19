@@ -72,14 +72,25 @@ function initMap() {
   map.data.addListener('click', function(event){
 										text = "";
 										var i;
+				
 										for(i=0; i < Object.keys(trips["entity"]).length;i++){
 											var j;
-											for(j=0; j < Object.keys(trips["entity"][i].trip_update.stop_time_update).length;j++){
+											for(j=0; j < Object.keys(trips["entity"][i].trip_update.stop_time_update).length;j++)
 												if (trips["entity"][i].trip_update.stop_time_update[j].stop_id == event.feature.getProperty('stop_id')){
 													text = text + '\n' + trips["entity"][i].trip_update.vehicle.label + " : "+ new Date().toLocaleTimeString(trips["entity"][i].trip_update.stop_time_update[j].arrival.time)}}		
+				                            // I am adding the alert code here 
+                               				var k;
+											for(k=0; k<object.keys(alerts["entity"][k].length;k++){
+											if(alerts["entity"][k] != 0){
+											
+											var obj = alerts["entity"][k];
+				
+											}
 										}
 									document.getElementById('content-window').textContent =
 									event.feature.getProperty('stop_name') + text;
+									// alert window
+									window.alert(obj);
 									});
   
   var ctfastrakBounds = new google.maps.Polygon({
@@ -97,6 +108,7 @@ function initMap() {
   
   getTrips();  
   getBusLocations();
+  getAlerts();
 
 }
 
@@ -105,6 +117,16 @@ var xhr = new XMLHttpRequest();
 xhr.open("GET", "http://65.213.12.244/realtimefeed/tripupdate/tripupdates.json", true);
 xhr.onload = function () {
 	trips = eval("("+ xhr.response +")");
+
+}
+xhr.send()
+}
+// Alert function
+function getAlerts(){
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "http://65.213.12.244/realtimefeed/alert/alerts.json", true);
+xhr.onload = function () {
+	alerts = eval("("+ xhr.response +")");
 
 }
 xhr.send()
